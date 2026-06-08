@@ -9,38 +9,75 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as AmlRouteImport } from './routes/aml'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MonitoredIndexRouteImport } from './routes/monitored.index'
+import { Route as MonitoredAccountIdRouteImport } from './routes/monitored.$accountId'
 
+const AmlRoute = AmlRouteImport.update({
+  id: '/aml',
+  path: '/aml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MonitoredIndexRoute = MonitoredIndexRouteImport.update({
+  id: '/monitored/',
+  path: '/monitored/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MonitoredAccountIdRoute = MonitoredAccountIdRouteImport.update({
+  id: '/monitored/$accountId',
+  path: '/monitored/$accountId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/aml': typeof AmlRoute
+  '/monitored/$accountId': typeof MonitoredAccountIdRoute
+  '/monitored/': typeof MonitoredIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/aml': typeof AmlRoute
+  '/monitored/$accountId': typeof MonitoredAccountIdRoute
+  '/monitored': typeof MonitoredIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/aml': typeof AmlRoute
+  '/monitored/$accountId': typeof MonitoredAccountIdRoute
+  '/monitored/': typeof MonitoredIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/aml' | '/monitored/$accountId' | '/monitored/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/aml' | '/monitored/$accountId' | '/monitored'
+  id: '__root__' | '/' | '/aml' | '/monitored/$accountId' | '/monitored/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AmlRoute: typeof AmlRoute
+  MonitoredAccountIdRoute: typeof MonitoredAccountIdRoute
+  MonitoredIndexRoute: typeof MonitoredIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/aml': {
+      id: '/aml'
+      path: '/aml'
+      fullPath: '/aml'
+      preLoaderRoute: typeof AmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +85,29 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/monitored/': {
+      id: '/monitored/'
+      path: '/monitored'
+      fullPath: '/monitored/'
+      preLoaderRoute: typeof MonitoredIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/monitored/$accountId': {
+      id: '/monitored/$accountId'
+      path: '/monitored/$accountId'
+      fullPath: '/monitored/$accountId'
+      preLoaderRoute: typeof MonitoredAccountIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AmlRoute: AmlRoute,
+  MonitoredAccountIdRoute: MonitoredAccountIdRoute,
+  MonitoredIndexRoute: MonitoredIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
