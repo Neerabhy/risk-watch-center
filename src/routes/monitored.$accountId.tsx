@@ -40,7 +40,7 @@ export const Route = createFileRoute("/monitored/$accountId")({
 });
 
 function AccountDetail() {
-  const a = Route.useLoaderData();
+  const a = Route.useLoaderData() as MonitoredAccount;
   const [invOpen, setInvOpen] = useState(false);
 
   return (
