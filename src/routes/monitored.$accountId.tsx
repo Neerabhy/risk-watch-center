@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { useState } from "react";
-import { monitoredAccounts, fmtINR, fmtDate } from "@/lib/fraud-data";
+import { monitoredAccounts, fmtINR, fmtDate, type MonitoredAccount } from "@/lib/fraud-data";
 import {
   Kpi,
   RiskBadge,
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/monitored/$accountId")({
   head: ({ params }) => ({
     meta: [{ title: `${params.accountId} · Monitored account` }],
   }),
-  loader: ({ params }) => {
+  loader: ({ params }): MonitoredAccount => {
     const a = monitoredAccounts.find((x) => x.accountId === params.accountId);
     if (!a) throw notFound();
     return a;
