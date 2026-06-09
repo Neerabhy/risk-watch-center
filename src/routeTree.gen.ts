@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as AmlRouteImport } from './routes/aml'
+import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MonitoredIndexRouteImport } from './routes/monitored.index'
 import { Route as MonitoredAccountIdRouteImport } from './routes/monitored.$accountId'
@@ -23,6 +24,11 @@ const LiveRoute = LiveRouteImport.update({
 const AmlRoute = AmlRouteImport.update({
   id: '/aml',
   path: '/aml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlertsRoute = AlertsRouteImport.update({
+  id: '/alerts',
+  path: '/alerts',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -43,6 +49,7 @@ const MonitoredAccountIdRoute = MonitoredAccountIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/alerts': typeof AlertsRoute
   '/aml': typeof AmlRoute
   '/live': typeof LiveRoute
   '/monitored/$accountId': typeof MonitoredAccountIdRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/alerts': typeof AlertsRoute
   '/aml': typeof AmlRoute
   '/live': typeof LiveRoute
   '/monitored/$accountId': typeof MonitoredAccountIdRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/alerts': typeof AlertsRoute
   '/aml': typeof AmlRoute
   '/live': typeof LiveRoute
   '/monitored/$accountId': typeof MonitoredAccountIdRoute
@@ -65,12 +74,25 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/aml' | '/live' | '/monitored/$accountId' | '/monitored/'
+  fullPaths:
+    | '/'
+    | '/alerts'
+    | '/aml'
+    | '/live'
+    | '/monitored/$accountId'
+    | '/monitored/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/aml' | '/live' | '/monitored/$accountId' | '/monitored'
+  to:
+    | '/'
+    | '/alerts'
+    | '/aml'
+    | '/live'
+    | '/monitored/$accountId'
+    | '/monitored'
   id:
     | '__root__'
     | '/'
+    | '/alerts'
     | '/aml'
     | '/live'
     | '/monitored/$accountId'
@@ -79,6 +101,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AlertsRoute: typeof AlertsRoute
   AmlRoute: typeof AmlRoute
   LiveRoute: typeof LiveRoute
   MonitoredAccountIdRoute: typeof MonitoredAccountIdRoute
@@ -99,6 +122,13 @@ declare module '@tanstack/react-router' {
       path: '/aml'
       fullPath: '/aml'
       preLoaderRoute: typeof AmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alerts': {
+      id: '/alerts'
+      path: '/alerts'
+      fullPath: '/alerts'
+      preLoaderRoute: typeof AlertsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -127,6 +157,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AlertsRoute: AlertsRoute,
   AmlRoute: AmlRoute,
   LiveRoute: LiveRoute,
   MonitoredAccountIdRoute: MonitoredAccountIdRoute,
