@@ -9,14 +9,38 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ReviewRouteImport } from './routes/review'
+import { Route as MerchantsRouteImport } from './routes/merchants'
+import { Route as LiveRouteImport } from './routes/live'
 import { Route as AmlRouteImport } from './routes/aml'
+import { Route as AlertsRouteImport } from './routes/alerts'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MonitoredIndexRouteImport } from './routes/monitored.index'
 import { Route as MonitoredAccountIdRouteImport } from './routes/monitored.$accountId'
 
+const ReviewRoute = ReviewRouteImport.update({
+  id: '/review',
+  path: '/review',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MerchantsRoute = MerchantsRouteImport.update({
+  id: '/merchants',
+  path: '/merchants',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LiveRoute = LiveRouteImport.update({
+  id: '/live',
+  path: '/live',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AmlRoute = AmlRouteImport.update({
   id: '/aml',
   path: '/aml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AlertsRoute = AlertsRouteImport.update({
+  id: '/alerts',
+  path: '/alerts',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -37,45 +61,114 @@ const MonitoredAccountIdRoute = MonitoredAccountIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/alerts': typeof AlertsRoute
   '/aml': typeof AmlRoute
+  '/live': typeof LiveRoute
+  '/merchants': typeof MerchantsRoute
+  '/review': typeof ReviewRoute
   '/monitored/$accountId': typeof MonitoredAccountIdRoute
   '/monitored/': typeof MonitoredIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/alerts': typeof AlertsRoute
   '/aml': typeof AmlRoute
+  '/live': typeof LiveRoute
+  '/merchants': typeof MerchantsRoute
+  '/review': typeof ReviewRoute
   '/monitored/$accountId': typeof MonitoredAccountIdRoute
   '/monitored': typeof MonitoredIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/alerts': typeof AlertsRoute
   '/aml': typeof AmlRoute
+  '/live': typeof LiveRoute
+  '/merchants': typeof MerchantsRoute
+  '/review': typeof ReviewRoute
   '/monitored/$accountId': typeof MonitoredAccountIdRoute
   '/monitored/': typeof MonitoredIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/aml' | '/monitored/$accountId' | '/monitored/'
+  fullPaths:
+    | '/'
+    | '/alerts'
+    | '/aml'
+    | '/live'
+    | '/merchants'
+    | '/review'
+    | '/monitored/$accountId'
+    | '/monitored/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/aml' | '/monitored/$accountId' | '/monitored'
-  id: '__root__' | '/' | '/aml' | '/monitored/$accountId' | '/monitored/'
+  to:
+    | '/'
+    | '/alerts'
+    | '/aml'
+    | '/live'
+    | '/merchants'
+    | '/review'
+    | '/monitored/$accountId'
+    | '/monitored'
+  id:
+    | '__root__'
+    | '/'
+    | '/alerts'
+    | '/aml'
+    | '/live'
+    | '/merchants'
+    | '/review'
+    | '/monitored/$accountId'
+    | '/monitored/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AlertsRoute: typeof AlertsRoute
   AmlRoute: typeof AmlRoute
+  LiveRoute: typeof LiveRoute
+  MerchantsRoute: typeof MerchantsRoute
+  ReviewRoute: typeof ReviewRoute
   MonitoredAccountIdRoute: typeof MonitoredAccountIdRoute
   MonitoredIndexRoute: typeof MonitoredIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/review': {
+      id: '/review'
+      path: '/review'
+      fullPath: '/review'
+      preLoaderRoute: typeof ReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/merchants': {
+      id: '/merchants'
+      path: '/merchants'
+      fullPath: '/merchants'
+      preLoaderRoute: typeof MerchantsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/live': {
+      id: '/live'
+      path: '/live'
+      fullPath: '/live'
+      preLoaderRoute: typeof LiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/aml': {
       id: '/aml'
       path: '/aml'
       fullPath: '/aml'
       preLoaderRoute: typeof AmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/alerts': {
+      id: '/alerts'
+      path: '/alerts'
+      fullPath: '/alerts'
+      preLoaderRoute: typeof AlertsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -104,7 +197,11 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AlertsRoute: AlertsRoute,
   AmlRoute: AmlRoute,
+  LiveRoute: LiveRoute,
+  MerchantsRoute: MerchantsRoute,
+  ReviewRoute: ReviewRoute,
   MonitoredAccountIdRoute: MonitoredAccountIdRoute,
   MonitoredIndexRoute: MonitoredIndexRoute,
 }
