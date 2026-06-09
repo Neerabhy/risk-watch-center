@@ -1,10 +1,14 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Shield, Activity, GitBranch, AlertTriangle, Search } from "lucide-react";
+import { Shield, Activity, GitBranch, AlertTriangle, Search, Radio, Bell, Gavel, Store } from "lucide-react";
 import type { ReactNode } from "react";
 import { Input } from "@/components/ui/input";
 
 const nav = [
-  { to: "/", label: "Overview", icon: Activity, exact: true },
+  { to: "/", label: "Dashboard", icon: Activity, exact: true },
+  { to: "/live", label: "Live Transactions", icon: Radio },
+  { to: "/alerts", label: "Fraud Alerts", icon: Bell },
+  { to: "/review", label: "Human Review", icon: Gavel },
+  { to: "/merchants", label: "Merchant Risk", icon: Store },
   { to: "/monitored", label: "Monitored accounts", icon: Shield },
   { to: "/aml", label: "AML monitoring", icon: GitBranch },
 ];
