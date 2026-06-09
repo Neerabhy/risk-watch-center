@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ReviewRouteImport } from './routes/review'
+import { Route as MerchantsRouteImport } from './routes/merchants'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as AmlRouteImport } from './routes/aml'
 import { Route as AlertsRouteImport } from './routes/alerts'
@@ -20,6 +21,11 @@ import { Route as MonitoredAccountIdRouteImport } from './routes/monitored.$acco
 const ReviewRoute = ReviewRouteImport.update({
   id: '/review',
   path: '/review',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MerchantsRoute = MerchantsRouteImport.update({
+  id: '/merchants',
+  path: '/merchants',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LiveRoute = LiveRouteImport.update({
@@ -58,6 +64,7 @@ export interface FileRoutesByFullPath {
   '/alerts': typeof AlertsRoute
   '/aml': typeof AmlRoute
   '/live': typeof LiveRoute
+  '/merchants': typeof MerchantsRoute
   '/review': typeof ReviewRoute
   '/monitored/$accountId': typeof MonitoredAccountIdRoute
   '/monitored/': typeof MonitoredIndexRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/alerts': typeof AlertsRoute
   '/aml': typeof AmlRoute
   '/live': typeof LiveRoute
+  '/merchants': typeof MerchantsRoute
   '/review': typeof ReviewRoute
   '/monitored/$accountId': typeof MonitoredAccountIdRoute
   '/monitored': typeof MonitoredIndexRoute
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/alerts': typeof AlertsRoute
   '/aml': typeof AmlRoute
   '/live': typeof LiveRoute
+  '/merchants': typeof MerchantsRoute
   '/review': typeof ReviewRoute
   '/monitored/$accountId': typeof MonitoredAccountIdRoute
   '/monitored/': typeof MonitoredIndexRoute
@@ -88,6 +97,7 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/aml'
     | '/live'
+    | '/merchants'
     | '/review'
     | '/monitored/$accountId'
     | '/monitored/'
@@ -97,6 +107,7 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/aml'
     | '/live'
+    | '/merchants'
     | '/review'
     | '/monitored/$accountId'
     | '/monitored'
@@ -106,6 +117,7 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/aml'
     | '/live'
+    | '/merchants'
     | '/review'
     | '/monitored/$accountId'
     | '/monitored/'
@@ -116,6 +128,7 @@ export interface RootRouteChildren {
   AlertsRoute: typeof AlertsRoute
   AmlRoute: typeof AmlRoute
   LiveRoute: typeof LiveRoute
+  MerchantsRoute: typeof MerchantsRoute
   ReviewRoute: typeof ReviewRoute
   MonitoredAccountIdRoute: typeof MonitoredAccountIdRoute
   MonitoredIndexRoute: typeof MonitoredIndexRoute
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/review'
       fullPath: '/review'
       preLoaderRoute: typeof ReviewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/merchants': {
+      id: '/merchants'
+      path: '/merchants'
+      fullPath: '/merchants'
+      preLoaderRoute: typeof MerchantsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/live': {
@@ -180,6 +200,7 @@ const rootRouteChildren: RootRouteChildren = {
   AlertsRoute: AlertsRoute,
   AmlRoute: AmlRoute,
   LiveRoute: LiveRoute,
+  MerchantsRoute: MerchantsRoute,
   ReviewRoute: ReviewRoute,
   MonitoredAccountIdRoute: MonitoredAccountIdRoute,
   MonitoredIndexRoute: MonitoredIndexRoute,
