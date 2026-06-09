@@ -9,11 +9,17 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as LiveRouteImport } from './routes/live'
 import { Route as AmlRouteImport } from './routes/aml'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as MonitoredIndexRouteImport } from './routes/monitored.index'
 import { Route as MonitoredAccountIdRouteImport } from './routes/monitored.$accountId'
 
+const LiveRoute = LiveRouteImport.update({
+  id: '/live',
+  path: '/live',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AmlRoute = AmlRouteImport.update({
   id: '/aml',
   path: '/aml',
@@ -38,12 +44,14 @@ const MonitoredAccountIdRoute = MonitoredAccountIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/aml': typeof AmlRoute
+  '/live': typeof LiveRoute
   '/monitored/$accountId': typeof MonitoredAccountIdRoute
   '/monitored/': typeof MonitoredIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/aml': typeof AmlRoute
+  '/live': typeof LiveRoute
   '/monitored/$accountId': typeof MonitoredAccountIdRoute
   '/monitored': typeof MonitoredIndexRoute
 }
@@ -51,26 +59,41 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/aml': typeof AmlRoute
+  '/live': typeof LiveRoute
   '/monitored/$accountId': typeof MonitoredAccountIdRoute
   '/monitored/': typeof MonitoredIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/aml' | '/monitored/$accountId' | '/monitored/'
+  fullPaths: '/' | '/aml' | '/live' | '/monitored/$accountId' | '/monitored/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/aml' | '/monitored/$accountId' | '/monitored'
-  id: '__root__' | '/' | '/aml' | '/monitored/$accountId' | '/monitored/'
+  to: '/' | '/aml' | '/live' | '/monitored/$accountId' | '/monitored'
+  id:
+    | '__root__'
+    | '/'
+    | '/aml'
+    | '/live'
+    | '/monitored/$accountId'
+    | '/monitored/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AmlRoute: typeof AmlRoute
+  LiveRoute: typeof LiveRoute
   MonitoredAccountIdRoute: typeof MonitoredAccountIdRoute
   MonitoredIndexRoute: typeof MonitoredIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/live': {
+      id: '/live'
+      path: '/live'
+      fullPath: '/live'
+      preLoaderRoute: typeof LiveRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/aml': {
       id: '/aml'
       path: '/aml'
@@ -105,9 +128,20 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AmlRoute: AmlRoute,
+  LiveRoute: LiveRoute,
   MonitoredAccountIdRoute: MonitoredAccountIdRoute,
   MonitoredIndexRoute: MonitoredIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
